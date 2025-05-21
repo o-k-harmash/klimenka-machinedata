@@ -7,14 +7,13 @@ Vector<int>[] templates =
     //{1, 1, 1, 0}
     // { 0, 1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1},
     // {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1}]
-    new Vector<int>(new int[]{ 1, 1, -1, -1, 1, 1}),
-    new Vector<int>(new int[]{-1, 1, -1, -1, 1, 1}),
-    new Vector<int>(new int[]{1, -1, -1, -1, 1, -1})
+    new Vector<int>(new int[]{ 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1 }),
+    new Vector<int>(new int[]{ 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 })
 };
 
 //l0-input
 //{1, 0, 1, 0} (tested values)
-Vector<int> input = new Vector<int>(new int[] { 1, 1, -1, -1, 1, 1 });
+Vector<int> input = new Vector<int>(new int[] { 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 });
 
 //hamming
 // var dotProductList = new int[templates.Length];

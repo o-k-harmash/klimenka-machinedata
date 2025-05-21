@@ -24,6 +24,15 @@ where T : INumber<T>
         elements = mtx;
     }
 
+    public Matrix(T[] v)
+    {
+        row = 1;
+        col = v.Length;
+        elements = new T[1, col];
+        for (int i = 0; i < col; i++)
+            elements[0, i] = v[i];
+    }
+
     public int row { get; init; }
     public int col { get; init; }
 
@@ -38,14 +47,24 @@ where T : INumber<T>
         set => elements[row, col] = value;
     }
 
+    public void ZeroDig()
+    {
+        for (int s = 0; s < row; s++)
+            elements[s, s] = T.Zero;
+    }
+
+    public void SingleDig()
+    {
+        for (int s = 0; s < row; s++)
+            elements[s, s] = T.One;
+    }
+
     public static Matrix<T> operator *(Matrix<T> mtxl, Matrix<T> mtxr)
     {
         int n = mtxl.row; // строки левой матрицы
         int m = mtxl.col; // столбцы левой == строки правой
         int p = mtxr.col; // столбцы правой матрицы
-
         Matrix<T> mtx = new Matrix<T>(n, p); // результат: [n x p]
-
         for (int i = 0; i < n; i++)             // строки результата
             for (int j = 0; j < p; j++)         // столбцы результата
             {
@@ -54,8 +73,39 @@ where T : INumber<T>
                     sum += mtxl[i, k] * mtxr[k, j]; // строка слева × столбец справа
                 mtx[i, j] = sum;
             }
-
         return mtx;
+    }
+
+    public static Matrix<T> operator *(T scalar, Matrix<T> mtx)
+    {
+        var result = new Matrix<T>(mtx.row, mtx.col);
+        for (int r = 0; r < mtx.row; r++)
+            for (int c = 0; c < mtx.col; c++)
+                result[r, c] = mtx[r, c] * scalar;
+        return result;
+    }
+
+    public static Matrix<T> operator *(Matrix<T> mtx, T scalar)
+    {
+        return scalar * mtx;
+    }
+
+    public override string ToString()
+    {
+        string str = "";
+        var s = 0;
+        while (s < row)
+        {
+            int c = 0;
+            while (c < col)
+            {
+                str += $"{elements[s, c]} ";
+                c++;
+            }
+            str += "\n";
+            s++;
+        }
+        return str;
     }
 
     /**
@@ -95,6 +145,25 @@ where T : INumber<T>
             for (int k = 0; k < m; k++)
             {
                 tmtx[k, i] = mtx[i, k];
+            }
+        }
+
+        return tmtx;
+    }
+
+    public static Matrix<T> operator +(Matrix<T> left, Matrix<T> right)
+    {
+        int n = left.row; // строки
+        int m = left.col; // столбцы
+
+        Matrix<T> tmtx = new Matrix<T>(n, m); // ✔️ Правильный порядок
+
+        for (int i = 0; i < n; i++)
+        {
+            for (int k = 0; k < m; k++)
+            {
+                // Приводим к dynamic, чтобы сработал оператор +
+                tmtx[i, k] = left[i, k] + right[i, k];
             }
         }
 
